@@ -30,7 +30,7 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange>
-          {children}
+          <div className="min-h-screen w-100 dark:bg-black">{children}</div>
         </ThemeProvider>
       </body>
     </html>
