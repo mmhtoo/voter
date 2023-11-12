@@ -8,5 +8,9 @@ export default function ThemeProvider({
   children,
   ...props
 }: ThemeProviderProps) {
-  return <NextThemeProvider {...props}>{children}</NextThemeProvider>
+  return (
+    <NextThemeProvider attribute="class" {...props}>
+      {children}
+    </NextThemeProvider>
+  )
 }

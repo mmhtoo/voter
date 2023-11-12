@@ -3,6 +3,8 @@ import './globals.css'
 import { Inter as FontSans } from 'next/font/google'
 import { cn } from '@/libs/utils'
 import ThemeProvider from '@/components/provider/theme-provider'
+import AppFooter from '@/components/app-footer'
+import { Toaster } from '@/components/ui/toaster'
 
 export const fontSans = FontSans({
   subsets: ['latin'],
@@ -10,7 +12,7 @@ export const fontSans = FontSans({
 })
 
 export const metadata: Metadata = {
-  title: '$s | Voter',
+  title: '%s | Voter',
 }
 
 export default function RootLayout({
@@ -22,7 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          'min-h-screen bg-background font-sans antialiased',
+          'min-h-screen dark:bg-black bg-background font-sans antialiased',
           fontSans.variable
         )}>
         <ThemeProvider
@@ -30,7 +32,11 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange>
-          <div className="min-h-screen w-100 dark:bg-black">{children}</div>
+          <>
+            {children}
+            <AppFooter />
+            <Toaster />
+          </>
         </ThemeProvider>
       </body>
     </html>
