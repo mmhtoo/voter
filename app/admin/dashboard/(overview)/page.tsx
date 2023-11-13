@@ -5,5 +5,9 @@ export const metadata: Metadata = {
 }
 
 export default function DashboardHomePage() {
-  return <h1>Dashboard home page</h1>
+  return (
+    <div className={'w-100 h-[1000px] mt-[72px] p-5'}>
+      <h1>Dasboard</h1>
+    </div>
+  )
 }
