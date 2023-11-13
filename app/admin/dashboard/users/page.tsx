@@ -2,7 +2,12 @@ import CustomersTable from '@/components/admin/customers/customers-table'
 import CustomersTableSkeleton from '@/components/admin/customers/customers-table-skeleton'
 import { Separator } from '@/components/ui/separator'
 import { Users } from 'lucide-react'
+import { Metadata } from 'next'
 import { Suspense } from 'react'
+
+export const metadata: Metadata = {
+  title: 'Customers',
+}
 
 export default function DashboardUsersPage() {
   return (

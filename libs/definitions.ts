@@ -20,3 +20,15 @@ type Customer = {
   created_at: Date | string
   updated_at: Date | string
 }
+
+type Topics = {
+  id: string
+  name: string
+  description: string
+  points_per_vote: number
+  from_date: Date | string
+  to_date: Date | string
+  status: 'active' | 'coming-soon' | 'died'
+  created_date: Date | string
+  updated_date: Date | string
+}
