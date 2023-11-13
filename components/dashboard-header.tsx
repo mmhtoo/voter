@@ -52,7 +52,7 @@ export default function DashboardHeader() {
   return (
     <header
       className={
-        'w-full py-3 md:px-[64px] px-[24px] border fixed top-0 left-0  right-0 overflow-hidden dark:bg-black bg-white flex items-center justify-between '
+        'w-full py-3 md:px-[64px] px-[24px] border fixed top-0 left-0 z-50  right-0 overflow-hidden dark:bg-black bg-white flex items-center justify-between '
       }>
       <h1 className="text-lg font-bold">Voter</h1>
       <div className={'md:flex hidden gap-6 align-items-center'}>

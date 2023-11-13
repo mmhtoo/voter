@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'Dashboard',
 }
 
-export default async function DashboardHomePage() {
+export default function DashboardHomePage() {
   return (
     <div
       className={'w-100 min-h-screen mt-[72px] p-5 flex align-items-center '}>
