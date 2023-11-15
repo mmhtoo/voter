@@ -202,7 +202,7 @@ async function main() {
   // await seedCustomers(client)
   // await seedAdmin(client)
   // await seedPaymentMethods(client)
-  // await seedPricings(client)
+  await seedPricings(client)
   // await seedTopics(client)
   // await seedContestants(client)
   await seedCustomerRequestPointBuy(client)

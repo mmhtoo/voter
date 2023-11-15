@@ -32,3 +32,11 @@ type Topics = {
   created_date: Date | string
   updated_date: Date | string
 }
+
+type Pricing = {
+  id: string
+  point: number
+  amount: number
+  created_at: Date | string
+  updated_at: Date | string
+}

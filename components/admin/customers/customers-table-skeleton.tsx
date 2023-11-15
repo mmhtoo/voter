@@ -6,8 +6,8 @@ import {
   TableHead,
   TableBody,
   TableCell,
+  Table,
 } from '@/components/ui/table'
-import { Table } from 'lucide-react'
 
 export default function CustomersTableSkeleton() {
   return (
@@ -24,86 +24,28 @@ export default function CustomersTableSkeleton() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[50px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[50px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[50px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[50px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="w-[150px] h-10 mb-3" />
-          </TableCell>
-        </TableRow>
+        {new Array(5).fill(null).map((_, index) => (
+          <TableRow key={index}>
+            <TableCell>
+              <Skeleton className="w-[150px] h-10 mb-3" />
+            </TableCell>
+            <TableCell>
+              <Skeleton className="w-[150px] h-10 mb-3" />
+            </TableCell>
+            <TableCell>
+              <Skeleton className="w-[150px] h-10 mb-3" />
+            </TableCell>
+            <TableCell>
+              <Skeleton className="w-[50px] h-10 mb-3" />
+            </TableCell>
+            <TableCell>
+              <Skeleton className="w-[150px] h-10 mb-3" />
+            </TableCell>
+            <TableCell>
+              <Skeleton className="w-[150px] h-10 mb-3" />
+            </TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   )
