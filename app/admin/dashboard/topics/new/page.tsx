@@ -49,8 +49,10 @@ export default function NewTopicPage() {
   } = form
 
   const onSubmit = handleSubmit((formValue) => {
+    setIsLoading(true)
     createNewTopic(formValue)
       .then((res) => {
+        setIsLoading(false)
         if (res.status != 'Success') {
           toast({
             description: res.message,
@@ -64,7 +66,7 @@ export default function NewTopicPage() {
         push('/admin/dashboard/topics')
       })
       .catch((e) => {
-        console.log(e)
+        setIsLoading(true)
         toast({
           description: e.message,
           variant: 'destructive',
