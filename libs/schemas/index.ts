@@ -1,6 +1,6 @@
 import * as z from 'zod'
 
-export const createTopicSchema = z.object({
+const commonTopicSchema = {
   name: z
     .string({ required_error: "Topic's name is required!" })
     .min(10, 'Minimum is 10 characters!')
@@ -23,6 +23,19 @@ export const createTopicSchema = z.object({
     required_error:
       'Need to choose for start date and end date for voting period to Topic!',
   }),
+}
+
+export const createTopicSchema = z.object({
+  ...commonTopicSchema,
 })
 
 export type CreateTopicForm = z.infer<typeof createTopicSchema>
+
+export const editTopicSchema = z.object({
+  ...commonTopicSchema,
+  id: z.string({
+    required_error: "Topic's id is required!",
+  }),
+})
+
+export type EditTopicForm = z.infer<typeof editTopicSchema>

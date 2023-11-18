@@ -12,6 +12,7 @@ import {
 import { cn } from '@/libs/utils'
 import { format } from 'date-fns'
 import { EditIcon } from 'lucide-react'
+import Link from 'next/link'
 
 export default async function TopicsTable() {
   const topics = await getAllTopics()
@@ -70,9 +71,11 @@ export default async function TopicsTable() {
               {topic.status}
             </TableCell>
             <TableCell className="py-1 mb-1">
-              <Button variant={'ghost'}>
-                <EditIcon className="w-[16px] text-yellow-500" />
-              </Button>
+              <Link href={`/admin/dashboard/topics/${topic.id}`}>
+                <Button variant={'ghost'}>
+                  <EditIcon className="w-[16px] text-yellow-500" />
+                </Button>
+              </Link>
             </TableCell>
           </TableRow>
         ))}

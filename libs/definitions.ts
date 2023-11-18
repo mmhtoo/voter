@@ -45,3 +45,8 @@ type ActionResponse = {
   message: string
   status: ActionStatus
 }
+
+type ErrorPageProps = {
+  error: Error & { digest?: string }
+  reset: () => void
+}
