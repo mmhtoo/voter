@@ -40,3 +40,8 @@ type Pricing = {
   created_at: Date | string
   updated_at: Date | string
 }
+
+type ActionResponse = {
+  message: string
+  status: ActionStatus
+}

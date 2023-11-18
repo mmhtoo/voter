@@ -2,15 +2,10 @@
 import { sql } from '@vercel/postgres'
 import bcrypt from 'bcrypt'
 
-export type Response = {
-  message: string
-  status: ActionStatus
-}
-
 export default async function login(
   email: string,
   password: string
-): Promise<Response> {
+): Promise<ActionResponse> {
   try {
     const queryResult = await sql<Admin>`
       SELECT * FROM admin t
