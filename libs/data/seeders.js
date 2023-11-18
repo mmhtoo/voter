@@ -110,21 +110,21 @@ const contestants = [
     name: 'Justin',
     description:
       'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...',
-    topics_id: 'acc872f9-06c7-435c-b036-7fbf4b079961',
+    topics_id: 'da5a6cff-9086-41a8-b2d8-0c6f69096420',
     image_name: 'justin-acc872f9-06c7-435c-b036-7fbf4b079961.png',
   },
   {
     name: 'Nike',
     description:
       'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...',
-    topics_id: 'acc872f9-06c7-435c-b036-7fbf4b079961',
+    topics_id: 'da5a6cff-9086-41a8-b2d8-0c6f69096420',
     image_name: 'nike-acc872f9-06c7-435c-b036-7fbf4b079961.png',
   },
   {
     name: 'Taylor',
     description:
       'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...',
-    topics_id: 'acc872f9-06c7-435c-b036-7fbf4b079961',
+    topics_id: 'da5a6cff-9086-41a8-b2d8-0c6f69096420',
     image_name: 'taylor-acc872f9-06c7-435c-b036-7fbf4b079961.png',
   },
 ]

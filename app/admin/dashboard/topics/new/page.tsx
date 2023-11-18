@@ -11,7 +11,7 @@ import { Separator } from '@/components/ui/separator'
 import { setPageTitle } from '@/libs/utils'
 import '@mdxeditor/editor/style.css'
 import { LeafyGreen } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import {
   MDXEditor,
@@ -29,15 +29,16 @@ import { CustomDateRangePicker } from '@/components/date-picker'
 import { zodResolver } from '@hookform/resolvers/zod'
 import createNewTopic from '@/actions/admin/topics/createNewTopic'
 import { useToast } from '@/components/ui/use-toast'
-import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
 import { CreateTopicForm, createTopicSchema } from '@/libs/schemas'
+import { useRouter } from 'next/navigation'
 
 export default function NewTopicPage() {
   const form = useForm<CreateTopicForm>({
     resolver: zodResolver(createTopicSchema),
   })
   const { toast } = useToast()
+  const { push } = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
 
   const {
     control,
@@ -60,12 +61,12 @@ export default function NewTopicPage() {
         toast({
           description: res.message,
         })
-        revalidatePath('/admin/dashboard/topics')
-        redirect('/admin/dashboard/topics')
+        push('/admin/dashboard/topics')
       })
       .catch((e) => {
+        console.log(e)
         toast({
-          description: e,
+          description: e.message,
           variant: 'destructive',
         })
       })
@@ -184,8 +185,8 @@ export default function NewTopicPage() {
                   />
                 </div>
                 <div className="w-100 flex flex-col items-center gap-2 mt-2">
-                  <Button type="submit" className="w-full">
-                    Submit
+                  <Button disabled={isLoading} type="submit" className="w-full">
+                    {isLoading ? 'Loading...' : 'Submit'}
                   </Button>
                 </div>
               </form>

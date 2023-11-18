@@ -3,6 +3,7 @@
 import getTopicByName from './getTopicByName'
 import { sql } from '@vercel/postgres'
 import { CreateTopicForm } from '@/libs/schemas'
+import { revalidatePath } from 'next/cache'
 
 export default async function createNewTopic(
   param: CreateTopicForm
@@ -10,7 +11,7 @@ export default async function createNewTopic(
   try {
     const savedTopics = await getTopicByName(param.name)
 
-    if (!savedTopics)
+    if (savedTopics)
       return {
         message: "Topic's name should not be duplicate!",
         status: 'Failed',
@@ -20,9 +21,18 @@ export default async function createNewTopic(
       INSERT INTO topics (name,description,points_per_vote,from_date,to_date,status)
       VALUES (${param.name},${param.description},${
       param.pointsPerVote
-    },${param.fromDate.toString()},${param.toDate.toString()},${'coming-soon'})
+    },${param.fromDate.toUTCString()},${param.toDate.toUTCString()},${'coming-soon'})
     `
-    console.log(queryResult)
+
+    if (queryResult.rowCount == 0) {
+      return {
+        message: 'Something went wrong, please try again or later!',
+        status: 'Failed',
+      }
+    }
+
+    revalidatePath('/admin/dashboard/topics')
+
     return {
       message: 'Successfully created new topic!',
       status: 'Success',
