@@ -11,9 +11,15 @@ export function setPageTitle(title: string) {
 }
 
 export function formatPsqlDate(date: Date) {
-  return date.toISOString().replace('T', ' ').replace('Z', ' ')
+  return new Date(date.getTime() + 1000 * 60 * -new Date().getTimezoneOffset())
+    .toISOString()
+    .replace('T', ' ')
+    .replace('Z', '')
 }
 
 export function today() {
-  return formatPsqlDate(new Date(Date.now()))
+  return new Date(Date.now() + 1000 * 60 * -new Date().getTimezoneOffset())
+    .toISOString()
+    .replace('T', ' ')
+    .replace('Z', '')
 }

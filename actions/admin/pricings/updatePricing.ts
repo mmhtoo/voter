@@ -4,6 +4,7 @@ import { UpdatePricingForm, updatePricingSchema } from '@/libs/schemas'
 import { today } from '@/libs/utils'
 import { sql } from '@vercel/postgres'
 import { revalidatePath } from 'next/cache'
+import getPricingByPoint from './getTopicByPoint'
 
 export default async function updatePricing(
   param: UpdatePricingForm
@@ -13,6 +14,16 @@ export default async function updatePricing(
     if (!validation.success) {
       return {
         message: 'Invalid request datas, please try again!',
+        status: 'Failed',
+      }
+    }
+
+    const savedPricing = await getPricingByPoint(Number(param.point))
+
+    if (savedPricing != null && savedPricing.id != param.id) {
+      return {
+        message:
+          "You've already defined amount for current point value, please defined for another related value!",
         status: 'Failed',
       }
     }
@@ -33,7 +44,7 @@ export default async function updatePricing(
 
     revalidatePath('/admin/dashboard/pricings')
     return {
-      message: 'Successfully created!',
+      message: 'Successfully updated!',
       status: 'Success',
     }
   } catch (e) {

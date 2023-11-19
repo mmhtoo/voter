@@ -23,6 +23,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { format } from 'date-fns'
 import { EditIcon, TrashIcon } from 'lucide-react'
 import { useRef, useState } from 'react'
+import EditPricingModal from './edit-pricing-modal'
 
 export default function PricingsTable({ pricings }: { pricings: Pricing[] }) {
   const confirmModalBtnRef = useRef<HTMLButtonElement | null>(null)
@@ -30,6 +31,8 @@ export default function PricingsTable({ pricings }: { pricings: Pricing[] }) {
   const pricingToDeleteRef = useRef<string | null>(null)
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [editPricing, setEditPricing] = useState<Pricing>()
 
   const onPressDeleteConfirm = () => {
     if (!pricingToDeleteRef.current) return
@@ -84,7 +87,13 @@ export default function PricingsTable({ pricings }: { pricings: Pricing[] }) {
                     : '-'}
                 </TableCell>
                 <TableCell className="py-1 mb-1 flex items-center justify-center gap-2">
-                  <Button variant={'ghost'} className="p-1">
+                  <Button
+                    onClick={() => {
+                      setEditPricing(pricing)
+                      setShowEditModal(true)
+                    }}
+                    variant={'ghost'}
+                    className="p-1">
                     <EditIcon className="w-[16px] text-yellow-500" />
                   </Button>
                   <Button
@@ -128,6 +137,14 @@ export default function PricingsTable({ pricings }: { pricings: Pricing[] }) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      <EditPricingModal
+        show={showEditModal}
+        data={editPricing}
+        onCancel={() => {
+          setEditPricing(undefined)
+          setShowEditModal(false)
+        }}
+      />
     </>
   )
 }
