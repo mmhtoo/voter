@@ -1,3 +1,4 @@
+import AddPaymentMethodModal from '@/components/admin/payment-methods/add-payment-method-modal'
 import PaymentMethodsTableSkeleton from '@/components/admin/payment-methods/payment-methods-table-skeleton'
 import PaymentMethodsTableWrapper from '@/components/admin/payment-methods/payment-methods-table-wrapper'
 import { Separator } from '@/components/ui/separator'
@@ -17,7 +18,7 @@ export default function DashboardPaymentMethodsPage() {
           <DollarSign className="w-[24px] h-[24px] text-yellow-500" />
           Payment Methods
         </h1>
-        {/* <NewPricingModal /> */}
+        <AddPaymentMethodModal />
       </div>
       <Separator />
       <Suspense fallback={<PaymentMethodsTableSkeleton />}>
