@@ -1,6 +1,7 @@
 'use server'
 
 import { EditTopicForm } from '@/libs/schemas'
+import { formatPsqlDate, today } from '@/libs/utils'
 import { sql } from '@vercel/postgres'
 import { revalidatePath } from 'next/cache'
 
@@ -11,9 +12,9 @@ export default async function updateTopics(
     const updateQueryResulse = await sql`
       UPDATE topics t
       SET name = ${param.name}, description = ${param.description}, 
-      points_per_vote = ${
-        param.pointsPerVote
-      }, updated_date = ${new Date().toUTCString()}
+      points_per_vote = ${param.pointsPerVote}, updated_date = ${today()},
+      from_date = ${formatPsqlDate(param.fromDate)},
+      to_date = ${formatPsqlDate(param.toDate)}
       WHERE t.id = ${param.id}
     `
 

@@ -4,6 +4,7 @@ import getTopicByName from './getTopicByName'
 import { sql } from '@vercel/postgres'
 import { CreateTopicForm } from '@/libs/schemas'
 import { revalidatePath } from 'next/cache'
+import { formatPsqlDate } from '@/libs/utils'
 
 export default async function createNewTopic(
   param: CreateTopicForm
@@ -21,7 +22,9 @@ export default async function createNewTopic(
       INSERT INTO topics (name,description,points_per_vote,from_date,to_date,status)
       VALUES (${param.name},${param.description},${
       param.pointsPerVote
-    },${param.fromDate.toUTCString()},${param.toDate.toUTCString()},${'coming-soon'})
+    },${formatPsqlDate(param.fromDate)},${formatPsqlDate(
+      param.toDate
+    )},${'coming-soon'})
     `
 
     if (queryResult.rowCount == 0) {
