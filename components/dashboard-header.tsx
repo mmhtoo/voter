@@ -40,6 +40,11 @@ const LINKS = [
   },
   {
     id: '5',
+    label: 'Payment Methods',
+    href: '/admin/dashboard/payment-methods',
+  },
+  {
+    id: '6',
     label: 'Point Requests',
     href: '/admin/dashboard/point-requests',
   },
@@ -83,10 +88,13 @@ export default function DashboardHeader() {
             <MenuIcon />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-24 right-[64px]">
-            <DropdownMenuItem>Home</DropdownMenuItem>
-            <DropdownMenuItem>Topics</DropdownMenuItem>
-            <DropdownMenuItem>Pricings</DropdownMenuItem>
-            <DropdownMenuItem>Point Requests</DropdownMenuItem>
+            {LINKS.map((link) => {
+              return (
+                <Link href={link.href}>
+                  <DropdownMenuItem>{link.label}</DropdownMenuItem>
+                </Link>
+              )
+            })}
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>Theme</DropdownMenuSubTrigger>
               <DropdownMenuSubContent>

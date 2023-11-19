@@ -23,3 +23,7 @@ export function today() {
     .replace('T', ' ')
     .replace('Z', '')
 }
+
+export function formatAccountSpacing(account: string) {
+  return account.toString().replace(/\d{4}(?=.)/g, '$& ')
+}

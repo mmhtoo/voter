@@ -42,6 +42,15 @@ type Pricing = {
   sold_count: number
 }
 
+type PaymentMethod = {
+  id: number
+  name: string
+  phone: string
+  account_number: string
+  created_at: Date
+  updated_at: Date
+}
+
 type ActionResponse = {
   message: string
   status: ActionStatus
