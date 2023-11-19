@@ -2,7 +2,7 @@
 
 import getTopicByName from './getTopicByName'
 import { sql } from '@vercel/postgres'
-import { CreateTopicForm } from '@/libs/schemas'
+import { CreateTopicForm, createTopicSchema } from '@/libs/schemas'
 import { revalidatePath } from 'next/cache'
 import { formatPsqlDate } from '@/libs/utils'
 
@@ -10,6 +10,15 @@ export default async function createNewTopic(
   param: CreateTopicForm
 ): Promise<ActionResponse> {
   try {
+    const validation = createTopicSchema.safeParse(param)
+
+    if (!validation.success) {
+      return {
+        message: 'Invalid request datas, please try again!',
+        status: 'Failed',
+      }
+    }
+
     const savedTopics = await getTopicByName(param.name)
 
     if (savedTopics)
@@ -34,6 +43,7 @@ export default async function createNewTopic(
       }
     }
 
+    revalidatePath('/admin/dashboard')
     revalidatePath('/admin/dashboard/topics')
 
     return {

@@ -1,6 +1,6 @@
 'use server'
 
-import { EditTopicForm } from '@/libs/schemas'
+import { EditTopicForm, editTopicSchema } from '@/libs/schemas'
 import { formatPsqlDate, today } from '@/libs/utils'
 import { sql } from '@vercel/postgres'
 import { revalidatePath } from 'next/cache'
@@ -9,6 +9,15 @@ export default async function updateTopics(
   param: EditTopicForm
 ): Promise<ActionResponse> {
   try {
+    const validation = editTopicSchema.safeParse(param)
+
+    if (!validation.success) {
+      return {
+        message: 'Invalid request datas, please try again!',
+        status: 'Failed',
+      }
+    }
+
     const updateQueryResulse = await sql`
       UPDATE topics t
       SET name = ${param.name}, description = ${param.description}, 
@@ -25,6 +34,7 @@ export default async function updateTopics(
       }
     }
 
+    revalidatePath('/admin/dashboard')
     revalidatePath('/admin/dashboard/topics')
     revalidatePath(`/admin/dashboard/topics/${param.id}`)
 

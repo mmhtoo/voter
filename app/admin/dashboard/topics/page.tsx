@@ -1,5 +1,4 @@
-import getAllTopics from '@/actions/admin/topics/getAllTopics'
-import TopicsTable from '@/components/admin/topics/topics-table'
+import TopicsTableWrapper from '@/components/admin/topics/topic-table-wrapper'
 import TopicsTableSkeleton from '@/components/admin/topics/topics-table-skeleton'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -13,8 +12,6 @@ export const metadata: Metadata = {
 }
 
 export default async function DashboardTopicsPage() {
-  const topics = await getAllTopics()
-
   return (
     <div className={'w-100 min-h-screen mt-[72px] p-5 '}>
       <div className="flex items-center justify-between">
@@ -35,7 +32,7 @@ export default async function DashboardTopicsPage() {
       </div>
       <Separator />
       <Suspense fallback={<TopicsTableSkeleton />}>
-        <TopicsTable topics={topics} />
+        <TopicsTableWrapper />
       </Suspense>
     </div>
   )

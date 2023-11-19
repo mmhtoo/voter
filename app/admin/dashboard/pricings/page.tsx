@@ -1,8 +1,9 @@
+import NewPricingModal from '@/components/admin/pricings/new-pricing-modal'
 import PricingsTable from '@/components/admin/pricings/pricings-table'
 import PricingsTableSkeleton from '@/components/admin/pricings/pricings-table-skeleton'
-import { Button } from '@/components/ui/button'
+import PricingsTableWrapper from '@/components/admin/pricings/pricings-table-wrapper'
 import { Separator } from '@/components/ui/separator'
-import { Coins, PlusCircle } from 'lucide-react'
+import { Coins } from 'lucide-react'
 import { Metadata } from 'next'
 import { Suspense } from 'react'
 
@@ -18,16 +19,11 @@ export default function PricingsPage() {
           <Coins className="w-[24px] h-[24px] text-yellow-500" />
           Pricings
         </h1>
-        <Button
-          variant={'secondary'}
-          className={'flex items-center gap-2 me-3 text-green-500'}>
-          <PlusCircle />
-          New
-        </Button>
+        <NewPricingModal />
       </div>
       <Separator />
       <Suspense fallback={<PricingsTableSkeleton />}>
-        <PricingsTable />
+        <PricingsTableWrapper />
       </Suspense>
     </div>
   )

@@ -39,3 +39,37 @@ export const editTopicSchema = z.object({
 })
 
 export type EditTopicForm = z.infer<typeof editTopicSchema>
+
+export const commonPricingSchema = {
+  point: z
+    .string({
+      required_error: 'Required points per one vote is required to add!',
+    })
+    .min(2, 'Allowed minimum is 10!')
+    .max(6, 'Allowed maximum is 100000!')
+    .regex(/^[1-9][0-9]+$/, 'Invalid point!'),
+  amount: z
+    .string({
+      required_error: 'Amount is required for point pricing!',
+    })
+    .min(3, 'Allowed minimum is 100!')
+    .max(6, 'Allowed maximum is 100000!')
+    .regex(/^[1-9][0-9]+$/, 'Invalid amount!'),
+}
+
+export const createPricingSchema = z.object({
+  ...commonPricingSchema,
+})
+
+export type CreatePricingForm = z.infer<typeof createPricingSchema>
+
+export const updatePricingSchema = z.object({
+  ...commonPricingSchema,
+  id: z
+    .string({
+      required_error: 'Id is required!',
+    })
+    .uuid('Invalid id for pricing!'),
+})
+
+export type UpdatePricingForm = z.infer<typeof updatePricingSchema>

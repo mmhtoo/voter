@@ -39,6 +39,7 @@ type Pricing = {
   amount: number
   created_at: Date | string
   updated_at: Date | string
+  sold_count: number
 }
 
 type ActionResponse = {
