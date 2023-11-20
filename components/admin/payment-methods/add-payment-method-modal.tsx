@@ -41,6 +41,7 @@ export default function AddPaymentMethodModal() {
     control,
     formState: { errors },
     handleSubmit,
+    resetField,
   } = form
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
@@ -56,6 +57,9 @@ export default function AddPaymentMethodModal() {
           variant: 'destructive',
         })
       }
+      resetField('name')
+      resetField('phone')
+      resetField('accountNumber')
       toast({
         description: res.message,
       })

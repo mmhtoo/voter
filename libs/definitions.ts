@@ -49,6 +49,7 @@ type PaymentMethod = {
   account_number: string
   created_at: Date
   updated_at: Date
+  cash_in_count: number
 }
 
 type ActionResponse = {
