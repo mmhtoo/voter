@@ -20,11 +20,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { toast, useToast } from '@/components/ui/use-toast'
+import { useToast } from '@/components/ui/use-toast'
 import { formatAccountSpacing } from '@/libs/utils'
 import { format } from 'date-fns'
 import { Edit, Trash } from 'lucide-react'
 import { useRef, useState } from 'react'
+import EditPaymentMethodModal from './edit-payment-method-modal'
 
 type Props = {
   methods: PaymentMethod[]
@@ -36,6 +37,8 @@ export default function PaymentMethodsTable(props: Props) {
   const paymentToBeDeleteRef = useRef<number | null>()
   const [isDeleting, setIsDeleting] = useState(false)
   const { toast } = useToast()
+  const editModalRef = useRef<HTMLButtonElement | null>(null)
+  const [editData, setEditData] = useState<PaymentMethod>()
 
   const onDeleteConfirm = () => {
     if (!paymentToBeDeleteRef.current) return
@@ -91,7 +94,13 @@ export default function PaymentMethodsTable(props: Props) {
                     : '-'}
                 </TableCell>
                 <TableCell className="flex items-center justify-center gap-2">
-                  <Button variant={'ghost'} className="p-1">
+                  <Button
+                    onClick={() => {
+                      setEditData(method)
+                      editModalRef.current?.click()
+                    }}
+                    variant={'ghost'}
+                    className="p-1">
                     <Edit className="w-[16px] text-yellow-500" />
                   </Button>
                   <Button
@@ -136,6 +145,14 @@ export default function PaymentMethodsTable(props: Props) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      <EditPaymentMethodModal
+        buttonRef={editModalRef}
+        target={editData?.account_number ? 'account' : 'phone'}
+        name={editData?.name!}
+        accountNumber={editData?.account_number}
+        phone={editData?.phone}
+        id={editData?.id!}
+      />
     </>
   )
 }

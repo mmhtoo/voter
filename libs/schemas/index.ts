@@ -115,3 +115,42 @@ export const addPaymentMethodSchemeWithAccount = z.object({
 export type AddPaymentMethodWithAccountForm = z.infer<
   typeof addPaymentMethodSchemeWithAccount
 >
+
+export const updatePaymentMethodSchemaWithPhone = z.object({
+  ...commonPaymentMethodSchema,
+  id: z.number({
+    required_error: 'Payment method id is required!',
+  }),
+  phone: z
+    .string({
+      required_error: 'Phone number is required to add!',
+    })
+    .min(6, 'Allowed minimum is 6 characters!')
+    .max(13, 'Allowed maximum is 13 characters!')
+    .regex(/^\d+[0-9]{5,13}$/, 'Invalid phone number!'),
+})
+
+export type UpdatePaymentMethodWithPhoneForm = z.infer<
+  typeof updatePaymentMethodSchemaWithPhone
+>
+
+export const updatePaymentMethodSchemaWithAccount = z.object({
+  ...commonPaymentMethodSchema,
+  id: z.number({
+    required_error: 'Payment method id is required!',
+  }),
+  accountNumber: z
+    .string({
+      required_error: 'Account number is required to add!',
+    })
+    .min(8, 'Allowed minimum is 8!')
+    .max(17, 'Allowed maximum is 17!')
+    .regex(
+      /^\d+[0-9]{7,17}$/,
+      "You can't contain any characters except numbers, invalid format!"
+    ),
+})
+
+export type UpdatePaymentMethodWithAccountForm = z.infer<
+  typeof updatePaymentMethodSchemaWithAccount
+>
