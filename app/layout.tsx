@@ -5,6 +5,7 @@ import { cn } from '@/libs/utils'
 import ThemeProvider from '@/components/provider/theme-provider'
 import AppFooter from '@/components/app-footer'
 import { Toaster } from '@/components/ui/toaster'
+import { ClerkProvider } from '@clerk/nextjs'
 
 export const fontSans = FontSans({
   subsets: ['latin'],
@@ -21,24 +22,26 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body
-        className={cn(
-          'min-h-screen dark:bg-black bg-background font-sans antialiased',
-          fontSans.variable
-        )}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange>
-          <>
-            {children}
-            <AppFooter />
-            <Toaster />
-          </>
-        </ThemeProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body
+          className={cn(
+            'min-h-screen dark:bg-black bg-background font-sans antialiased',
+            fontSans.variable
+          )}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange>
+            <>
+              {children}
+              <AppFooter />
+              <Toaster />
+            </>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }

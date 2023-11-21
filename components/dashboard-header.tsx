@@ -13,9 +13,20 @@ import {
 } from './ui/dropdown-menu'
 import { Label } from './ui/label'
 import { useTheme } from 'next-themes'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/libs/utils'
 import Link from 'next/link'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+} from './ui/alert-dialog'
+import { useState } from 'react'
+import useLogout from '@/libs/hooks/useLogout'
 
 const LINKS = [
   {
@@ -53,6 +64,8 @@ const LINKS = [
 export default function DashboardHeader() {
   const { setTheme } = useTheme()
   const pathName = usePathname()
+  const [showLogoutModal, setShowLogoutModal] = useState(false)
+  const logout = useLogout()
 
   return (
     <header
@@ -78,7 +91,10 @@ export default function DashboardHeader() {
       </div>
       <div className="items-center gap-3  hidden md:flex">
         <ThemeSwitcher />
-        <Button variant={'ghost'} className="text-red-500 ">
+        <Button
+          onClick={() => setShowLogoutModal(true)}
+          variant={'ghost'}
+          className="text-red-500 ">
           Logout
         </Button>
       </div>
@@ -109,10 +125,30 @@ export default function DashboardHeader() {
                 </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuSub>
-            <DropdownMenuItem className="text-red-500">Logout</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setShowLogoutModal(true)}
+              className="text-red-500">
+              Logout
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+      <AlertDialog open={showLogoutModal}>
+        <AlertDialogContent>
+          <AlertDialogHeader className="text-red-500">
+            Are you sure to logout?
+          </AlertDialogHeader>
+          <AlertDialogDescription>
+            If you want to continue, press Yes button.
+          </AlertDialogDescription>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowLogoutModal(false)}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={logout}>Yes</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </header>
   )
 }
