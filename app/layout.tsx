@@ -6,6 +6,7 @@ import ThemeProvider from '@/components/provider/theme-provider'
 import AppFooter from '@/components/app-footer'
 import { Toaster } from '@/components/ui/toaster'
 import { ClerkProvider } from '@clerk/nextjs'
+import PublicHeader from '@/components/public-header'
 
 export const fontSans = FontSans({
   subsets: ['latin'],
@@ -35,6 +36,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange>
             <>
+              <PublicHeader />
               {children}
               <AppFooter />
               <Toaster />
