@@ -5,7 +5,11 @@ import { NextFetchEvent, NextRequest, NextResponse } from 'next/server'
 // Please edit this to allow other routes to be public as needed.
 // See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your Middleware
 export default authMiddleware({
-  ignoredRoutes: ['/((?!api|trpc))(_next.*|.+.[w]+$)', '/'],
+  ignoredRoutes: [
+    '/((?!api|trpc))(_next.*|.+.[w]+$)',
+    '/',
+    /^\/*(?!.*\badmin\b).*/,
+  ],
 })
 
 export const config = {
