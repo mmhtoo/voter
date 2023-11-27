@@ -7,6 +7,7 @@ import {
   SignedIn,
   SignedOut,
   UserButton,
+  useAuth,
   useUser,
 } from '@clerk/nextjs'
 import { usePathname } from 'next/navigation'

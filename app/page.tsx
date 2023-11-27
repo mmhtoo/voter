@@ -1,10 +1,9 @@
 import ComingSoonTopics from '@/components/topic/ComingSoonTopics'
 import ComingSoonTopicsSkeleton from '@/components/topic/ComingSoonTopicsSkeleton'
-import TopicItem from '@/components/topic/TopicItem'
 import TopicItemSkeleton from '@/components/topic/TopicItemSkeleton'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { Clock, Star } from 'lucide-react'
+import { Star } from 'lucide-react'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { Suspense } from 'react'
@@ -13,7 +12,7 @@ export const metadata: Metadata = {
   title: 'Voter | Home',
 }
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="w-full min-h-screen mt-[64px]">
       <div className="w-full  h-screen mt-[100px] p-10">
@@ -38,17 +37,8 @@ export default function Home() {
           </Link>
         </div>
       </div>
+
       <div className="mt-[10px] p-10 mb-[32px]">
-        <Label className="text-[28px]  flex items-center gap-2 ml-[16px] text-red-500">
-          <Star /> Recent Contests
-        </Label>
-        {/* <TopicItem /> */}
-        <TopicItemSkeleton />
-      </div>
-      <div className="mt-[10px] p-10 mb-[32px]">
-        <Label className="text-[28px]  flex items-center gap-2 ml-[16px] text-red-500">
-          <Clock /> Coming Soon Contests
-        </Label>
         <Suspense fallback={<ComingSoonTopicsSkeleton />}>
           <ComingSoonTopics />
         </Suspense>
