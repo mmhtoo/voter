@@ -28,6 +28,7 @@ type Topics = {
   points_per_vote: number
   from_date: Date | string
   to_date: Date | string
+  image_name: string
   status: 'active' | 'coming-soon' | 'died'
   created_date: Date | string
   updated_date: Date | string

@@ -8,10 +8,10 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
-import { setPageTitle } from '@/libs/utils'
+import { setPageTitle, today } from '@/libs/utils'
 import '@mdxeditor/editor/style.css'
 import { LeafyGreen } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import {
   MDXEditor,
@@ -31,6 +31,12 @@ import createNewTopic from '@/actions/admin/topics/createNewTopic'
 import { useToast } from '@/components/ui/use-toast'
 import { CreateTopicForm, createTopicSchema } from '@/libs/schemas'
 import { useRouter } from 'next/navigation'
+import { v4 as uuidv4 } from 'uuid'
+import { format } from 'date-fns'
+import { upload } from '@vercel/blob/client'
+import { BLOB_TOKEN } from '@/libs/data/constants'
+
+const ALLOWED_IMAGE_TYPES = ['image/png', 'image/jpg', 'image/jpeg']
 
 export default function NewTopicPage() {
   const form = useForm<CreateTopicForm>({
@@ -46,32 +52,51 @@ export default function NewTopicPage() {
     formState: { errors },
     handleSubmit,
     watch,
+    getValues,
+    setError,
   } = form
+  const imageRef = useRef<HTMLInputElement>(null)
 
-  const onSubmit = handleSubmit((formValue) => {
-    setIsLoading(true)
-    createNewTopic(formValue)
-      .then((res) => {
-        setIsLoading(false)
-        if (res.status != 'Success') {
-          toast({
-            description: res.message,
-            variant: 'destructive',
-          })
-          return
-        }
-        toast({
-          description: res.message,
-        })
-        push('/admin/dashboard/topics')
+  const onSubmit = handleSubmit(async (formValue) => {
+    const file = imageRef.current?.files ? imageRef.current.files[0] : null
+    if (!file) {
+      setError('imageName', { message: 'Image is required!' })
+      return
+    }
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      setError('imageName', { message: 'Invalid image!' })
+      return
+    }
+
+    try {
+      setIsLoading(true)
+      const { url } = await upload(`images/${getValues('imageName')}`, file, {
+        access: 'public',
+        handleUploadUrl: '/api/images/upload',
       })
-      .catch((e) => {
-        setIsLoading(true)
+      const actionResult = await createNewTopic({
+        ...formValue,
+        imageName: url,
+      })
+      setIsLoading(false)
+      if (actionResult.status != 'Success') {
         toast({
-          description: e.message,
+          description: actionResult.message,
           variant: 'destructive',
         })
+        return
+      }
+      toast({
+        description: actionResult.message,
       })
+      push('/admin/dashboard/topics')
+    } catch (e) {
+      setIsLoading(false)
+      toast({
+        description: (e as unknown as any).message,
+        variant: 'destructive',
+      })
+    }
   })
 
   useEffect(() => {
@@ -128,7 +153,6 @@ export default function NewTopicPage() {
                       headingsPlugin(),
                       quotePlugin(),
                       listsPlugin(),
-
                       toolbarPlugin({
                         toolbarContents: () => (
                           <>
@@ -185,6 +209,31 @@ export default function NewTopicPage() {
                       errors.fromDate?.message || errors.toDate?.message || ''
                     }`}
                   />
+                </div>
+                <div className="my-2">
+                  <Label>Topics' Image</Label>
+                  <Input
+                    type="file"
+                    ref={imageRef}
+                    placeholder={'Choose Image (png or jpa or jpeg)'}
+                    accept="image/png,image/jpg,image/jpeg"
+                    onChange={(e) => {
+                      !getValues('imageName') &&
+                        setValue(
+                          'imageName',
+                          `${uuidv4()}_${format(
+                            new Date(
+                              Date.now() +
+                                1000 * 60 * -new Date().getTimezoneOffset()
+                            ) as Date,
+                            'dd-MM-yyyy/HH:mm:ss'
+                          )}.jpeg`
+                        )
+                    }}
+                  />
+                  <Label className="text-red-500 font-normal text-[12px]">
+                    {errors.imageName?.message}
+                  </Label>
                 </div>
                 <div className="w-100 flex flex-col items-center gap-2 mt-2">
                   <Button disabled={isLoading} type="submit" className="w-full">

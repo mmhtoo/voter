@@ -54,7 +54,7 @@ const getActiveTopicsCount = async () => {
   try {
     const activeTopicsCountQuery = await sql<Count>`
       SELECT COUNT(*) count from topics t
-      WHERE t.status = 'active'
+      WHERE t.from_date >= NOW()
     `
     return activeTopicsCountQuery.rows[0].count
   } catch (e) {

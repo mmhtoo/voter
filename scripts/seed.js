@@ -129,7 +129,7 @@ async function seedTopics(client) {
         points_per_vote INT NOT NULL,
         from_date TIMESTAMP NOT NULL,
         to_date TIMESTAMP NOT NULL,
-        status VARCHAR(30) NOT NULL,
+        image_name TEXT NULL,
         created_date TIMESTAMP DEFAULT NOW(),
         updated_date TIMESTAMP 
       )
@@ -137,8 +137,8 @@ async function seedTopics(client) {
     await Promise.all(
       topics.map(async (topic) => {
         return await client.sql`
-        INSERT INTO topics (name,description,points_per_vote,from_date,to_date,status)
-        VALUES (${topic.name},${topic.description},${topic.pointPerVote},${topic.fromDate},${topic.toDate},${topic.status})
+        INSERT INTO topics (name,description,points_per_vote,from_date,to_date)
+        VALUES (${topic.name},${topic.description},${topic.pointPerVote},${topic.fromDate},${topic.toDate})
       `
       })
     )

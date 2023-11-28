@@ -19,6 +19,9 @@ const commonTopicSchema = {
     required_error:
       'Need to choose for start date and end date for voting period to Topic!',
   }),
+  imageName: z.string({
+    required_error: "Topic's image is required!",
+  }),
   toDate: z.date({
     required_error:
       'Need to choose for start date and end date for voting period to Topic!',
