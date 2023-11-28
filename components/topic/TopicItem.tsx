@@ -1,7 +1,12 @@
 'use client'
 import { ArrowRight, Calendar, Leaf, Users } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader } from '../ui/card'
-import { MDXEditor } from '@mdxeditor/editor'
+import {
+  MDXEditor,
+  headingsPlugin,
+  listsPlugin,
+  quotePlugin,
+} from '@mdxeditor/editor'
 import { useEffect, useState } from 'react'
 import { Label } from '../ui/label'
 import { Button } from '../ui/button'
@@ -25,6 +30,12 @@ export default function TopicItem(props: Topics) {
         {isClient && (
           <MDXEditor
             readOnly
+            plugins={[
+              headingsPlugin(),
+              quotePlugin(),
+              listsPlugin(),
+              headingsPlugin(),
+            ]}
             className="md:line-clamp-1 line-clamp-3"
             markdown={props.description}
           />
