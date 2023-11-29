@@ -21,7 +21,7 @@ export default function TopicDetail({ topic }: { topic: Topics }) {
       <Label className="text-[24px]">
         <h1>{topic.name}</h1>
       </Label>
-      <div className="w-full md:w-[700px] max-h-[400px] h-[300px] md:h-[400px] bg-blue-100 mt-2 relative my-[32px]">
+      <div className="w-full md:w-[700px] max-h-[400px] rounded-xl h-[300px] md:h-[400px] bg-blue-100 mt-2 relative my-[32px]">
         <Image
           src={topic.image_name}
           alt={`${topic.name}'s image`}
@@ -29,7 +29,7 @@ export default function TopicDetail({ topic }: { topic: Topics }) {
             width: '100%',
             height: '100%',
           }}
-          className="rounded-md"
+          className="rounded-xl"
           fill
         />
       </div>

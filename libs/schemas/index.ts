@@ -157,3 +157,19 @@ export const updatePaymentMethodSchemaWithAccount = z.object({
 export type UpdatePaymentMethodWithAccountForm = z.infer<
   typeof updatePaymentMethodSchemaWithAccount
 >
+
+export const requestBuyPointsSchema = z.object({
+  clerkId: z.string({
+    required_error: 'User Id is required!',
+  }),
+  pricingId: z
+    .string({
+      required_error: 'Need to select pricing!',
+    })
+    .uuid('Invalid Pricing Id!'),
+  screenshoot: z.string({
+    required_error: "Transaction's screenshoot is required!",
+  }),
+})
+
+export type RequestBuyPointsForm = z.infer<typeof requestBuyPointsSchema>

@@ -34,9 +34,7 @@ import { useRouter } from 'next/navigation'
 import { v4 as uuidv4 } from 'uuid'
 import { format } from 'date-fns'
 import { upload } from '@vercel/blob/client'
-import { BLOB_TOKEN } from '@/libs/data/constants'
-
-const ALLOWED_IMAGE_TYPES = ['image/png', 'image/jpg', 'image/jpeg']
+import { ALLOWED_IMAGE_TYPES } from '@/libs/data/constants'
 
 export default function NewTopicPage() {
   const form = useForm<CreateTopicForm>({

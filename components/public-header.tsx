@@ -99,7 +99,9 @@ export default function PublicHeader() {
                 <UserButton />
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Label className="text-red-500">Sign Out</Label>
+                <Label className="text-red-500">
+                  <SignOutButton>Sign Out</SignOutButton>
+                </Label>
               </DropdownMenuItem>
             </SignedIn>
             <SignedOut>
