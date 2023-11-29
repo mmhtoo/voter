@@ -1,6 +1,8 @@
 import { headers } from 'next/headers'
 import { Webhook } from 'svix'
-import { WebhookEvent } from '@clerk/nextjs/server'
+import { UserJSON, WebhookEvent } from '@clerk/nextjs/server'
+import createNewCustomer from '@/actions/customer/createNewCustomer'
+import { DEFAULT_POINT } from '@/libs/data/constants'
 
 export async function POST(req: Request) {
   // getting WEBHOOK_SECRET FROM env
@@ -43,8 +45,25 @@ export async function POST(req: Request) {
   // get the data and type
   const data = evt.data
   const eventType = evt.type
-  console.log(data)
-  console.log(eventType)
+
+  switch (eventType) {
+    case 'user.created':
+      const user = data as UserJSON
+      const response = await createNewCustomer({
+        username: user.username!,
+        email: user.email_addresses[0].email_address!,
+        points: DEFAULT_POINT as number,
+        clerkUserId: user.id,
+      })
+      if (response.status != 'Success') {
+        return new Response('Failed!', {
+          status: 400,
+        })
+      }
+      return new Response('Success', {
+        status: 400,
+      })
+  }
 
   return new Response('', {
     status: 200,

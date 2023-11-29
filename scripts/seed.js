@@ -18,8 +18,8 @@ async function seedCustomers(client) {
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
         username VARCHAR(30) NOT NULL,
         email VARCHAR(50) UNIQUE NOT NULL,
-        password VARCHAR(100) NOT NULL,
         points INT DEFAULT 0,
+        clerk__user_id VARCHAR(200) NULL,
         phone VARCHAR(20),
         created_at TIMESTAMP DEFAULT NOW(),
         updated_at TIMESTAMP
@@ -28,10 +28,9 @@ async function seedCustomers(client) {
     console.log('---created customers table---')
     await Promise.all([
       customers.map(async (customer) => {
-        const hashedPassword = await bcrypt.hash(customer.password, 10)
         return client.sql`
-          INSERT INTO customers (username,email,password)
-          VALUES (${customer.username},${customer.email},${hashedPassword})
+          INSERT INTO customers (username,email)
+          VALUES (${customer.username},${customer.email})
         `
       }),
     ])

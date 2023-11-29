@@ -14,7 +14,6 @@ type Customer = {
   id: string
   username: string
   email: string
-  password: string
   phone?: string
   points: number
   created_at: Date | string
