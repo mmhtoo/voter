@@ -26,12 +26,14 @@ import { v4 as uuidv4 } from 'uuid'
 import { ALLOWED_IMAGE_TYPES } from '@/libs/data/constants'
 import getCustomerByClerkId from '@/actions/customer/getCustomerByClerkId'
 import requestPoints from '@/actions/buy-points/requestPoints'
+import { useRouter } from 'next/navigation'
 
 type Props = {
   pricings: Pricing[]
+  paymentMethods: PaymentMethod[]
 }
 
-export default function BuyPointsForm({ pricings }: Props) {
+export default function BuyPointsForm({ pricings, paymentMethods }: Props) {
   const { userId } = useAuth()
   const [pricingsMap, setPricingsMap] = useState<{
     [key: string]: {
@@ -59,6 +61,7 @@ export default function BuyPointsForm({ pricings }: Props) {
   const { toast } = useToast()
   const screenshootRef = useRef<File | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const { push } = useRouter()
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -91,7 +94,6 @@ export default function BuyPointsForm({ pricings }: Props) {
     }
     handleSubmit(async (formValues) => {
       setIsLoading(true)
-      console.log(formValues.clerkId)
       const savedData = await getCustomerByClerkId(formValues.clerkId)
       if (!savedData) {
         setIsLoading(false)
@@ -105,8 +107,8 @@ export default function BuyPointsForm({ pricings }: Props) {
         clerkId: savedData.userid,
         pricingId: formValues.pricingId,
         screenshoot: formValues.screenshoot,
+        paymentMethodId: formValues.paymentMethodId,
       }
-      console.log(param)
       try {
         const response = await requestPoints(param)
         setIsLoading(false)
@@ -119,6 +121,7 @@ export default function BuyPointsForm({ pricings }: Props) {
         toast({
           description: response.message,
         })
+        push('/topics')
       } catch (e) {
         setIsLoading(false)
         toast({
@@ -136,6 +139,7 @@ export default function BuyPointsForm({ pricings }: Props) {
     setValue('pricingId', target.id)
   }, [watch('point')])
 
+  // settings for pricings map
   useEffect(() => {
     const temp: {
       [key: string]: {
@@ -164,12 +168,6 @@ export default function BuyPointsForm({ pricings }: Props) {
       description: 'Invalid user Id!',
     })
   }, [errors.clerkId])
-
-  useEffect(() => {
-    console.log(watch('screenshoot'))
-  }, [watch('screenshoot')])
-
-  console.log(errors)
 
   return (
     <Card className="w-[90%] md:w-[500px]">
@@ -204,9 +202,15 @@ export default function BuyPointsForm({ pricings }: Props) {
                               <SelectLabel>Plans</SelectLabel>
                               {pricings.map((pricing) => {
                                 return (
-                                  <SelectItem value={pricing.id}>
-                                    {pricing.point} Points -{' '}
-                                    {pricing.amount.toLocaleString()} MMK
+                                  <SelectItem
+                                    className="flex"
+                                    value={pricing.id}>
+                                    <span>
+                                      {pricing.point} Points {'    - '}
+                                    </span>
+                                    <span className="text-yellow-500">
+                                      {pricing.amount.toLocaleString()} MMK
+                                    </span>
                                   </SelectItem>
                                 )
                               })}
@@ -249,6 +253,48 @@ export default function BuyPointsForm({ pricings }: Props) {
             />
             <FormField
               control={control}
+              name={'paymentMethodId'}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <Label>
+                      Payment Methods <span className="text-red-500">*</span>
+                    </Label>
+                    <FormControl>
+                      <>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}>
+                          <SelectTrigger>
+                            <SelectValue placeholder={'Choose plan'} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>Choose Payment Method</SelectLabel>
+                              {paymentMethods.map((method) => {
+                                return (
+                                  <SelectItem value={method.id.toString()}>
+                                    {method.name} {'-  '}
+                                    {method.account_number || method.phone}
+                                  </SelectItem>
+                                )
+                              })}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                        <Label
+                          id="error-topic-name"
+                          className="text-red-500 font-normal text-[12px]">
+                          {errors.pricingId?.message?.toString()}
+                        </Label>
+                      </>
+                    </FormControl>
+                  </FormItem>
+                )
+              }}
+            />
+            <FormField
+              control={control}
               name={'screenshoot'}
               render={({ field }) => {
                 return (
@@ -279,8 +325,8 @@ export default function BuyPointsForm({ pricings }: Props) {
               }}
             />
             <div className="w-full mt-3">
-              <Button type="submit" className="w-full">
-                Buy
+              <Button disabled={isLoading} type="submit" className="w-full">
+                {isLoading ? 'Loading...' : 'Buy'}
               </Button>
             </div>
           </form>

@@ -7,7 +7,6 @@ export default async function requestPoints(
   param: RequestBuyPointsForm
 ): Promise<ActionResponse> {
   try {
-    console.log(param)
     const validation = requestBuyPointsSchema.safeParse(param)
     if (!validation.success) {
       return {
@@ -17,7 +16,7 @@ export default async function requestPoints(
     }
     const result = await sql`
       INSERT INTO customers_request_points (customer_id,payment_method_id,pricing_id,screenshoot_image)
-      VALUES (${param.clerkId},3,${param.pricingId},${param.screenshoot})
+      VALUES (${param.clerkId},${param.paymentMethodId},${param.pricingId},${param.screenshoot})
     `
     if (result.rowCount == 0) {
       return {

@@ -167,6 +167,9 @@ export const requestBuyPointsSchema = z.object({
       required_error: 'Need to select pricing!',
     })
     .uuid('Invalid Pricing Id!'),
+  paymentMethodId: z.string({
+    required_error: 'Payment Method is needed to choose!',
+  }),
   screenshoot: z.string({
     required_error: "Transaction's screenshoot is required!",
   }),
