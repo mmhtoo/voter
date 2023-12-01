@@ -8,7 +8,7 @@ type Props = {
 
 export default async function RequestPointsTableWrapper(props: Props) {
   const { page, hasConfirmed } = props
-  const data = await getRequestPoints(page, 10, '', hasConfirmed)
+  const data = await getRequestPoints(page, 1, '', hasConfirmed)
 
   return <RequestPointsTable data={data} hasConfirmed={hasConfirmed} />
 }

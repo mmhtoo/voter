@@ -1,6 +1,5 @@
 import { getRequestPointsTotalPage } from '@/actions/admin/request-points/getRequestpoints'
 import Pagination from '@/components/Pagination'
-import RequestPointsTable from '@/components/admin/request-points/request-points-table'
 import RequestPointTableSkeleton from '@/components/admin/request-points/request-points-table-skeleton'
 import RequestPointsTableWrapper from '@/components/admin/request-points/request-points-table-wrapper'
 import { Separator } from '@/components/ui/separator'
@@ -25,7 +24,7 @@ type Props = {
 export default async function DashboardPointRequestsPage({
   searchParams: { page = 1, hasConfirmed = false },
 }: Props) {
-  const totalPage = await getRequestPointsTotalPage(10, hasConfirmed)
+  const totalPage = await getRequestPointsTotalPage(1, hasConfirmed)
 
   return (
     <div className={'w-100 min-h-screen mt-[72px] p-5 '}>
@@ -41,7 +40,7 @@ export default async function DashboardPointRequestsPage({
         <div className={cn({ hidden: totalPage < 2 })}>
           <Pagination
             currentPage={page}
-            targetUrl={'/admin/dashboard/request-points'}
+            targetUrl={'/admin/dashboard/point-requests'}
             totalPage={totalPage}
           />
         </div>

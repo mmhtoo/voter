@@ -1,6 +1,7 @@
 'use server'
 
 import { sql } from '@vercel/postgres'
+import { unstable_noStore } from 'next/cache'
 
 export default async function getRequestPoints(
   page: number = 1,
@@ -43,6 +44,7 @@ export async function getRequestPointsTotalPage(
   hasConfirmed: boolean = false
 ) {
   try {
+    unstable_noStore()
     const result = await sql<{ count: number }>`
       SELECT COUNT(*) as count FROM customers_request_points T
       WHERE t.has_confirmed = ${hasConfirmed}

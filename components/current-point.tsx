@@ -22,11 +22,9 @@ export function CurrentPoint() {
   return (
     <>
       <Button className="hidden md:flex" variant={'outline'}>
-        Current - <span className="text-red-500 "> {point} Points</span>
+        <span className="text-green-500"> {point} Points</span>
       </Button>
-      <span className="md:hidden">
-        Current - <span className="text-red-500 "> {point} Points</span>
-      </span>
+      <span className="md:hidden text-green-500 ">{point} Points</span>
     </>
   )
 }

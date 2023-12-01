@@ -38,10 +38,12 @@ export default function RequestPointsTable(props: Props) {
     show: boolean
     requestId: number | null
     userId: string | null
+    point: number | null
   }>({
     show: false,
     requestId: null,
     userId: null,
+    point: null,
   })
   const [isConfirming, setIsConfirming] = useState(false)
   const [isSynchronizing, setIsSynchronizing] = useState(false)
@@ -62,7 +64,7 @@ export default function RequestPointsTable(props: Props) {
         setIsSynchronizing(true)
         const syncStatus = await updatePointData(
           alertModal.userId!,
-          alertModal.requestId!,
+          alertModal.point!,
           '+'
         )
         setIsSynchronizing(false)
@@ -70,7 +72,12 @@ export default function RequestPointsTable(props: Props) {
           variant: syncStatus.status == 'Failed' ? 'destructive' : 'default',
           description: syncStatus.message,
         })
-        setAlertModal({ show: false, requestId: null, userId: null })
+        setAlertModal({
+          show: false,
+          requestId: null,
+          userId: null,
+          point: null,
+        })
         replace(path)
       })
       .catch((e) => {
@@ -154,6 +161,7 @@ export default function RequestPointsTable(props: Props) {
                             show: true,
                             requestId: request.request_id,
                             userId: request.user_id,
+                            point: request.point,
                           })
                         }
                         variant={'outline'}>
@@ -183,7 +191,17 @@ export default function RequestPointsTable(props: Props) {
                 won't be able to undo!
               </AlertDialogDescription>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel
+                  onClick={() =>
+                    setAlertModal({
+                      show: false,
+                      requestId: null,
+                      userId: null,
+                      point: null,
+                    })
+                  }>
+                  Cancel
+                </AlertDialogCancel>
                 <AlertDialogAction
                   onClick={handleClickConfirm}
                   disabled={isConfirming}>
