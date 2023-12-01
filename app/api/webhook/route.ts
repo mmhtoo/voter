@@ -3,6 +3,7 @@ import { Webhook } from 'svix'
 import { UserJSON, WebhookEvent } from '@clerk/nextjs/server'
 import createNewCustomer from '@/actions/customer/createNewCustomer'
 import { DEFAULT_POINT } from '@/libs/data/constants'
+import { revalidatePath } from 'next/cache'
 
 export async function POST(req: Request) {
   // getting WEBHOOK_SECRET FROM env
@@ -60,8 +61,9 @@ export async function POST(req: Request) {
           status: 400,
         })
       }
+      // revalidatePath('/admin/dashboard')
       return new Response('Success', {
-        status: 400,
+        status: 200,
       })
   }
 

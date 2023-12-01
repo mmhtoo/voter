@@ -2,6 +2,7 @@
 
 import { RequestBuyPointsForm, requestBuyPointsSchema } from '@/libs/schemas'
 import { sql } from '@vercel/postgres'
+import { revalidatePath } from 'next/cache'
 
 export default async function requestPoints(
   param: RequestBuyPointsForm
@@ -24,6 +25,8 @@ export default async function requestPoints(
         status: 'Failed',
       }
     }
+    revalidatePath('/admin/dashboard/point-requests')
+    revalidatePath('/admin/dashboard')
     return {
       message:
         'Successfully done, please wait a few minutes for confirmation payment from admin!',

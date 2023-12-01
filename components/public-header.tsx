@@ -7,7 +7,6 @@ import {
   SignedIn,
   SignedOut,
   UserButton,
-  useAuth,
   useUser,
 } from '@clerk/nextjs'
 import { usePathname } from 'next/navigation'
@@ -22,6 +21,7 @@ import {
 } from './ui/dropdown-menu'
 import { MenuIcon } from 'lucide-react'
 import Link from 'next/link'
+import { CurrentPoint, CurrentPointSkeleton } from './current-point'
 import { Suspense } from 'react'
 
 export default function PublicHeader() {
@@ -38,7 +38,7 @@ export default function PublicHeader() {
   return (
     <header
       className={cn(
-        'w-full py-2 md:px-[64px] px-[24px] border fixed top-0 left-0 z-50  right-0 overflow-hidden dark:bg-black bg-white flex items-center justify-between'
+        'w-full py-3 md:px-[64px] px-[24px] border fixed top-0 left-0 z-50  right-0 overflow-hidden dark:bg-black bg-white flex items-center justify-between'
       )}>
       <h1>Voter</h1>
       <div className="md:flex hidden gap-6 align-items-center">
@@ -53,24 +53,27 @@ export default function PublicHeader() {
             <Label>
               <Link href={'/buy-points'}>Buy Points</Link>
             </Label>
+            <SignedIn>
+              <Suspense fallback={<CurrentPointSkeleton />}>
+                <CurrentPoint />
+              </Suspense>
+            </SignedIn>
           </div>
           <div className="flex items-center gap-2">
             <Label>{authUser.user?.username}</Label>
             <UserButton afterSignOutUrl={'/sign-in'} />
           </div>
         </div>
-        <Suspense fallback={<h1 className="text-3xl text-red-500">Loading</h1>}>
-          <SignedOut>
-            <div className="flex items-center gap-2">
-              <SignInButton redirectUrl={'/sign-in'}>
-                <Button variant={'outline'}>Sign In</Button>
-              </SignInButton>
-              <SignUpButton redirectUrl={'/sign-up'}>
-                <Button>Sign Up</Button>
-              </SignUpButton>
-            </div>
-          </SignedOut>
-        </Suspense>
+        <SignedOut>
+          <div className="flex items-center gap-2">
+            <SignInButton redirectUrl={'/sign-in'}>
+              <Button variant={'outline'}>Sign In</Button>
+            </SignInButton>
+            <SignUpButton redirectUrl={'/sign-up'}>
+              <Button>Sign Up</Button>
+            </SignUpButton>
+          </div>
+        </SignedOut>
         <ThemeSwitcher />
         <SignedIn>
           <Label className="text-red-500 my-auto">
@@ -92,6 +95,9 @@ export default function PublicHeader() {
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Link href={'/buy-points'}>Buy Points</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="opacity-90">
+              <CurrentPoint />
             </DropdownMenuItem>
             <SignedIn>
               <DropdownMenuItem className="flex items-center gap-3">

@@ -24,7 +24,7 @@ import { useToast } from '../ui/use-toast'
 import { upload } from '@vercel/blob/client'
 import { v4 as uuidv4 } from 'uuid'
 import { ALLOWED_IMAGE_TYPES } from '@/libs/data/constants'
-import getCustomerByClerkId from '@/actions/customer/getCustomerByClerkId'
+import { getCustomerIdByClerkId } from '@/actions/customer/getCustomerByClerkId'
 import requestPoints from '@/actions/buy-points/requestPoints'
 import { useRouter } from 'next/navigation'
 
@@ -94,7 +94,7 @@ export default function BuyPointsForm({ pricings, paymentMethods }: Props) {
     }
     handleSubmit(async (formValues) => {
       setIsLoading(true)
-      const savedData = await getCustomerByClerkId(formValues.clerkId)
+      const savedData = await getCustomerIdByClerkId(formValues.clerkId)
       if (!savedData) {
         setIsLoading(false)
         toast({

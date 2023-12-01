@@ -18,9 +18,7 @@ export default async function deletePaymentMethod(
         status: 'Failed',
       }
     }
-
     revalidatePath('/admin/dashboard/payment-methods')
-
     return {
       message: 'Successfully deleted!',
       status: 'Success',

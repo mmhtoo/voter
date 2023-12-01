@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default async function Home() {
   return (
     <div className="w-full min-h-screen mt-[64px]">
-      <div className="w-full h-[500px] mt-[100px] p-10">
+      <div className="w-full h-[500px] mt-[200px] p-10">
         <Label>
           <h1 className="md:text-[120px] text-[64px] text-transparent bg-gradient-to-r bg-clip-text from-purple-400 to-pink-600">
             Welcome to Voter!
