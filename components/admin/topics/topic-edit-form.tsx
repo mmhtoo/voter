@@ -100,7 +100,7 @@ export default function TopicEditForm(props: Props) {
         <CardHeader>
           <h1 className="flex items-center mb-2 ms-2 gap-2">
             <LeafyGreen className="text-green-500" />
-            <span className="font-normal text-[18px]">Create New Topic</span>
+            <span className="font-normal text-[18px]">Edit Topic</span>
           </h1>
           <Separator />
           <CardContent className="py-5">

@@ -2,20 +2,6 @@
 
 import { sql } from '@vercel/postgres'
 
-type RequestPointsResult = {
-  request_id: number
-  screenshoot_image: string
-  username: string
-  email: string
-  user_id: string
-  payment_name: string
-  phone: string | null
-  account_number: string | null
-  amount: number
-  point: number
-  has_confirmed: boolean
-}
-
 export default async function getRequestPoints(
   page: number = 1,
   size: number = 3,
@@ -48,6 +34,22 @@ export default async function getRequestPoints(
     return result.rows
   } catch (e) {
     console.log('Error at getRequestPoints ', e)
+    throw e
+  }
+}
+
+export async function getRequestPointsTotalPage(
+  sizePerPage: number = 10,
+  hasConfirmed: boolean = false
+) {
+  try {
+    const result = await sql<{ count: number }>`
+      SELECT COUNT(*) as count FROM customers_request_points T
+      WHERE t.has_confirmed = ${hasConfirmed}
+    `
+    return Math.ceil(result.rows[0].count / sizePerPage)
+  } catch (e) {
+    console.log('Error at getRequestPointsTotalPage ', e)
     throw e
   }
 }

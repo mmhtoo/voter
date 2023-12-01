@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 type Props = {
   totalPage: number
   currentPage: number
+  targetUrl: string
 }
 
 const Breaker = () => {
@@ -21,7 +22,7 @@ const Breaker = () => {
 }
 
 export default function Pagination(param: Props) {
-  const { totalPage, currentPage } = param
+  const { totalPage, currentPage, targetUrl } = param
   const [_isClient, setIsClient] = useState(false)
   const searchParams = useSearchParams()
   const { push } = useRouter()
@@ -30,7 +31,7 @@ export default function Pagination(param: Props) {
   const goToPage = (page: number) => {
     const params = new URLSearchParams(searchParams)
     params.set('page', page.toString())
-    push(`/topics?${params.toString()}`)
+    push(`${targetUrl}?${params.toString()}`)
   }
 
   useEffect(() => {

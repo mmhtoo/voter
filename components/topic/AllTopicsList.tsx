@@ -16,7 +16,11 @@ export default async function AllTopicsList(props: { page: number }) {
       {allTopics.map((topic) => {
         return <TopicItem {...topic} />
       })}
-      <Pagination currentPage={page} totalPage={totalPage} />
+      <Pagination
+        currentPage={page}
+        totalPage={totalPage}
+        targetUrl={'/topics'}
+      />
     </div>
   )
 }

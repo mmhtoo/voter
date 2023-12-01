@@ -52,6 +52,20 @@ type PaymentMethod = {
   cash_in_count: number
 }
 
+type RequestPointsResult = {
+  request_id: number
+  screenshoot_image: string
+  username: string
+  email: string
+  user_id: string
+  payment_name: string
+  phone: string | null
+  account_number: string | null
+  amount: number
+  point: number
+  has_confirmed: boolean
+}
+
 type ActionResponse = {
   message: string
   status: ActionStatus
