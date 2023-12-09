@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache'
 import { formatPsqlDate } from '@/libs/utils'
 
 export default async function createNewTopic(
-  param: CreateTopicForm
+  param: CreateTopicForm & { id: string }
 ): Promise<ActionResponse> {
   try {
     const validation = createTopicSchema.safeParse(param)
@@ -28,10 +28,12 @@ export default async function createNewTopic(
       }
 
     const queryResult = await sql`
-      INSERT INTO topics (name,description,points_per_vote,image_name,from_date,to_date)
-      VALUES (${param.name},${param.description},${param.pointsPerVote},${
-      param.imageName
-    },${formatPsqlDate(param.fromDate)},${formatPsqlDate(param.toDate)})
+      INSERT INTO topics (id, name,description,points_per_vote,image_name,from_date,to_date)
+      VALUES (${param.id}, ${param.name},${param.description},${
+      param.pointsPerVote
+    },${param.imageName},${formatPsqlDate(param.fromDate)},${formatPsqlDate(
+      param.toDate
+    )})
     `
 
     if (queryResult.rowCount == 0) {

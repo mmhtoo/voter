@@ -41,6 +41,7 @@ import { format } from 'date-fns'
 import { upload } from '@vercel/blob/client'
 import { ALLOWED_IMAGE_TYPES } from '@/libs/data/constants'
 import CreateContestantForm from '@/components/admin/topics/create-contestant-form'
+import saveContestants from '@/actions/admin/contestants/saveContestants'
 
 export default function NewTopicPage() {
   const form = useForm<CreateTopicForm>({
@@ -134,29 +135,56 @@ export default function NewTopicPage() {
     setContestantsError(errors)
     if (hasErrorInContestants) return
 
-    console.log(contestants)
-
     try {
       setIsLoading(true)
       const { url } = await upload(`images/${getValues('imageName')}`, file, {
         access: 'public',
         handleUploadUrl: '/api/images/upload',
       })
+      const topicId = uuidv4()
       const actionResult = await createNewTopic({
         ...formValue,
         imageName: url,
+        id: topicId,
       })
-      setIsLoading(false)
+
       if (actionResult.status != 'Success') {
+        setIsLoading(false)
         toast({
           description: actionResult.message,
           variant: 'destructive',
         })
         return
       }
+
+      const uploadPromises = Promise.all([
+        ...contestants.map((item) => {
+          return upload(`images/${item.image_name}`, item.file!, {
+            access: 'public',
+            handleUploadUrl: '/api/images/upload',
+          })
+        }),
+      ])
+      const uploadResult = await uploadPromises
+
+      const contestantsResult = await saveContestants(
+        contestants.map((contestant, index) => {
+          return {
+            name: contestant.name,
+            description: contestant.description,
+            vote_count: 0,
+            topics_id: topicId,
+            image_name: uploadResult[index].url,
+          }
+        })
+      )
+
       toast({
-        description: actionResult.message,
+        variant:
+          contestantsResult.status == 'Success' ? 'default' : 'destructive',
+        description: contestantsResult.message,
       })
+      setIsLoading(false)
       push('/admin/dashboard/topics')
     } catch (e) {
       setIsLoading(false)
@@ -173,7 +201,7 @@ export default function NewTopicPage() {
 
   return (
     <div className="w-100 min-h-screen mt-[72px] p-5 flex justify-center">
-      <Card className="mt-3 w-full md:w-[550px]">
+      <Card className="mt-3 w-full md:w-[600px]">
         <CardHeader>
           <h1 className="flex items-center mb-2 ms-2 gap-2">
             <LeafyGreen className="text-green-500" />

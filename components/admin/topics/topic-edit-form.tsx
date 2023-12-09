@@ -28,7 +28,7 @@ import { LeafyGreen } from 'lucide-react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import updateTopics from '@/actions/admin/topics/updateTopics'
 import { useToast } from '@/components/ui/use-toast'
 import { useRouter } from 'next/navigation'
@@ -53,8 +53,38 @@ export default function TopicEditForm(props: Props) {
   const { toast } = useToast()
   const { push } = useRouter()
 
+  const checkTwoObject = useCallback(
+    (newForm: EditTopicForm) => {
+      const oldForm = props.data
+      if (oldForm.name == newForm.name) {
+        return true
+      }
+      if (oldForm.description == newForm.description) {
+        return true
+      }
+      if (oldForm.points_per_vote == Number(newForm.pointsPerVote)) {
+        return true
+      }
+      if (oldForm.from_date == newForm.fromDate) {
+        return true
+      }
+      if (oldForm.to_date == newForm.toDate) {
+        return true
+      }
+      return false
+    },
+    [props.data]
+  )
+
   const onSubmit = handleSubmit((formValue) => {
+    if (checkTwoObject(formValue)) {
+      toast({
+        description: 'Nothing was updated!',
+      })
+      return push('/admin/dashboard/topics')
+    }
     setIsLoading(true)
+
     updateTopics({
       ...formValue,
     })
@@ -90,7 +120,7 @@ export default function TopicEditForm(props: Props) {
     setValue('fromDate', form.created_date! as Date)
     setValue('toDate', form.to_date! as Date)
     setValue('pointsPerVote', form.points_per_vote.toString())
-
+    setValue('imageName', form.image_name)
     editorRef.current && editorRef.current.setMarkdown(watch('description'))
   }, [])
 

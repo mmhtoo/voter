@@ -153,7 +153,7 @@ async function seedContestants(client) {
         id SERIAL PRIMARY KEY,
         name VARCHAR(100) NOT NULl,
         description TEXT NOT NULL,
-        image_name VARCHAR(100),
+        image_name TEXT,
         created_at TIMESTAMP DEFAULT NOW(),
         updated_at TIMESTAMP,
         vote_count INT NOT NULL DEFAULT 0,

@@ -3,9 +3,22 @@
 import { sql } from '@vercel/postgres'
 
 export default async function saveContestants(
-  params: Contestant[]
+  params: Partial<Contestant>[]
 ): Promise<ActionResponse> {
+  console.log(params)
   try {
+    const promises = Promise.all([
+      ...params.map((param) => saveContestant(param)),
+    ])
+    const effectRows = await promises
+    console.log(effectRows)
+
+    return {
+      status: effectRows.includes(0) ? 'Failed' : 'Success',
+      message: effectRows.includes(0)
+        ? 'Failed to save contestants, please try again or later!'
+        : 'Successfully added!',
+    }
   } catch (e) {
     console.log('Error at saveContestants ', e)
     return {
@@ -15,7 +28,7 @@ export default async function saveContestants(
   }
 }
 
-export async function saveContestant(param: Contestant) {
+export async function saveContestant(param: Partial<Contestant>) {
   try {
     const { name, description, image_name, topics_id, vote_count } = param
     const result = await sql`
