@@ -43,6 +43,26 @@ export const editTopicSchema = z.object({
 
 export type EditTopicForm = z.infer<typeof editTopicSchema>
 
+export const createContestantSchema = z.object({
+  name: z
+    .string({
+      required_error: "Contestant's name is required!",
+    })
+    .min(5, 'Name should have minium 5 characters!')
+    .max(100, 'Name should not have more then 100 characters!'),
+  description: z
+    .string({
+      required_error: "Contestant's description is required!",
+    })
+    .min(30, 'Description should have minimum 30 characters!')
+    .max(300, 'Description should not have more than 300 characters!'),
+  image_name: z.string({
+    required_error: 'Contestant image name is required!',
+  }),
+})
+
+export type CreateContestantFormType = z.infer<typeof createContestantSchema>
+
 export const commonPricingSchema = {
   point: z
     .string({

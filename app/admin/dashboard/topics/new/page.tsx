@@ -29,12 +29,18 @@ import { CustomDateRangePicker } from '@/components/date-picker'
 import { zodResolver } from '@hookform/resolvers/zod'
 import createNewTopic from '@/actions/admin/topics/createNewTopic'
 import { useToast } from '@/components/ui/use-toast'
-import { CreateTopicForm, createTopicSchema } from '@/libs/schemas'
+import {
+  CreateContestantFormType,
+  CreateTopicForm,
+  createContestantSchema,
+  createTopicSchema,
+} from '@/libs/schemas'
 import { useRouter } from 'next/navigation'
 import { v4 as uuidv4 } from 'uuid'
 import { format } from 'date-fns'
 import { upload } from '@vercel/blob/client'
 import { ALLOWED_IMAGE_TYPES } from '@/libs/data/constants'
+import CreateContestantForm from '@/components/admin/topics/create-contestant-form'
 
 export default function NewTopicPage() {
   const form = useForm<CreateTopicForm>({
@@ -43,6 +49,12 @@ export default function NewTopicPage() {
   const { toast } = useToast()
   const { push } = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const [contestants, setContestants] = useState<
+    (CreateContestantFormType & { file?: File })[]
+  >([])
+  const [contestantsError, setContestantsError] = useState<
+    (CreateContestantFormType & { file: string })[]
+  >([])
 
   const {
     control,
@@ -65,6 +77,64 @@ export default function NewTopicPage() {
       setError('imageName', { message: 'Invalid image!' })
       return
     }
+
+    // a topic should have minimum 2 contestants to be
+    if (contestants.length < 2) {
+      return toast({
+        description: 'A topic should have mininum 2 contestants!',
+        variant: 'destructive',
+      })
+    }
+
+    let hasErrorInContestants = false
+    const errors: (CreateContestantFormType & { file: string })[] = []
+    const contestantNames: string[] = []
+    contestants.forEach((contestant) => {
+      const error: CreateContestantFormType & { file: string } = {
+        name: '',
+        image_name: '',
+        description: '',
+        file: '',
+      }
+      const targetIndex = contestantNames.findIndex(
+        (item) => item == contestant.name
+      )
+      if (targetIndex != -1) {
+        error.name = 'You have already added contestant with this name!'
+        hasErrorInContestants = true
+      }
+      if (
+        !contestant.name ||
+        contestant.name.trim().length < 5 ||
+        contestant.name.trim().length > 100
+      ) {
+        error.name = 'Minimum is 5 characters and maximum is 100 characters!'
+        hasErrorInContestants = true
+      }
+      if (
+        !contestant.description ||
+        contestant.description.trim().length < 30 ||
+        contestant.description.trim().length > 300
+      ) {
+        error.description =
+          'Minimum is 30 characters and maximum is 300 characters!'
+        hasErrorInContestants = true
+      }
+      if (
+        !contestant.file ||
+        !ALLOWED_IMAGE_TYPES.includes(contestant.file.type)
+      ) {
+        error.file = 'File is required and allowed types are jpg, jpeg and png.'
+        hasErrorInContestants = true
+      }
+      contestantNames.push(contestant.name)
+      errors.push(error)
+    })
+
+    setContestantsError(errors)
+    if (hasErrorInContestants) return
+
+    console.log(contestants)
 
     try {
       setIsLoading(true)
@@ -136,13 +206,13 @@ export default function NewTopicPage() {
                     </FormItem>
                   )}
                 />
-                <div className="mt-2 mb-2">
+                <div className="my-1">
                   <FormLabel>
                     Description <span className="text-red-500">*</span>
                   </FormLabel>
                   <MDXEditor
                     markdown={''}
-                    className="editor"
+                    className="editor border rounded-md"
                     contentEditableClassName={
                       'max-h-[150px] min-h-[150px] editor overflow-scroll scroll-p-2 scroll-m-0 dark:text-zinc-50'
                     }
@@ -191,7 +261,7 @@ export default function NewTopicPage() {
                     </FormItem>
                   )}
                 />
-                <div className="mb-2 mt-2">
+                <div className="my-1">
                   <CustomDateRangePicker
                     from={watch('fromDate')}
                     to={watch('toDate')}
@@ -208,7 +278,7 @@ export default function NewTopicPage() {
                     }`}
                   />
                 </div>
-                <div className="my-2">
+                <div className="my-1">
                   <Label>Topics' Image</Label>
                   <Input
                     type="file"
@@ -233,6 +303,31 @@ export default function NewTopicPage() {
                     {errors.imageName?.message}
                   </Label>
                 </div>
+                <CreateContestantForm
+                  onAddContestant={(newItem) => {
+                    setContestants((prev) => {
+                      return [...prev, newItem]
+                    })
+                  }}
+                  onRemoveContestant={(targetIndex) => {
+                    console.log(targetIndex)
+                    setContestants((prev) => {
+                      return prev.filter((_item, index) => {
+                        return targetIndex !== index
+                      })
+                    })
+                  }}
+                  onChangeContesant={(target, newVal) => {
+                    setContestants((prev) => {
+                      return prev.map((old, index) => {
+                        if (index == target) return { ...newVal }
+                        return old
+                      })
+                    })
+                  }}
+                  contestants={contestants}
+                  errors={contestantsError}
+                />
                 <div className="w-100 flex flex-col items-center gap-2 mt-2">
                   <Button disabled={isLoading} type="submit" className="w-full">
                     {isLoading ? 'Loading...' : 'Submit'}

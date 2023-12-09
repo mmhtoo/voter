@@ -75,3 +75,14 @@ type ErrorPageProps = {
   error: Error & { digest?: string }
   reset: () => void
 }
+
+type Contestant = {
+  id: string
+  name: string
+  description: string
+  image_name: string
+  created_date: Date
+  updated_date: Date
+  vote_count: number
+  topics_id: string
+}

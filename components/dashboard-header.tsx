@@ -106,7 +106,7 @@ export default function DashboardHeader() {
           <DropdownMenuContent className="w-24 right-[64px]">
             {LINKS.map((link) => {
               return (
-                <Link href={link.href}>
+                <Link key={link.id} href={link.href}>
                   <DropdownMenuItem>{link.label}</DropdownMenuItem>
                 </Link>
               )
