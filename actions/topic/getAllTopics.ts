@@ -12,6 +12,7 @@ export default async function getAllTopics(
     const result = await sql<Topics>`
       SELECT * FROM topics t
       LIMIT ${size} OFFSET ${offset}
+      
     `
     return result.rows
   } catch (e) {

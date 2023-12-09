@@ -22,15 +22,23 @@ import {
 import { useToast } from '@/components/ui/use-toast'
 import { cn } from '@/libs/utils'
 import { format } from 'date-fns'
-import { EditIcon, ShieldAlert, Trash } from 'lucide-react'
+import { EditIcon, ShieldAlert, Trash, Users } from 'lucide-react'
 import Link from 'next/link'
 import { useRef, useState } from 'react'
+import ContestantsModal from './contestants-modal'
 
 export default function TopicsTable({ topics }: { topics: Topics[] }) {
   const confirmModalRef = useRef<HTMLButtonElement | null>(null)
   const [topicToBeDelete, setTopicToBeDelete] = useState<string>()
   const [isDeleting, setIsDeleting] = useState(false)
   const { toast } = useToast()
+  const [contestantsModal, setContestantsModal] = useState<{
+    show: boolean
+    topicId?: string
+  }>({
+    show: false,
+    topicId: '',
+  })
 
   const onDeleteTopic = () => {
     if (!topicToBeDelete) return
@@ -113,6 +121,14 @@ export default function TopicsTable({ topics }: { topics: Topics[] }) {
                 {topic.status}
               </TableCell>
               <TableCell className="py-1 mb-1 flex items-center gap-2 justify-center">
+                <Button
+                  onClick={() => {
+                    setContestantsModal({ show: true, topicId: topic.id })
+                  }}
+                  variant={'ghost'}
+                  className="p-2">
+                  <Users className="w-[16px] text-orange-500" />
+                </Button>
                 <Link href={`/admin/dashboard/topics/${topic.id}`}>
                   <Button variant={'ghost'} className="p-2">
                     <EditIcon className="w-[16px] text-yellow-500" />
@@ -153,6 +169,11 @@ export default function TopicsTable({ topics }: { topics: Topics[] }) {
           ))}
         </TableBody>
       </Table>
+      <ContestantsModal
+        topicId={contestantsModal.topicId}
+        show={contestantsModal.show}
+        onClose={() => setContestantsModal({ show: false, topicId: undefined })}
+      />
       <AlertDialog>
         <AlertDialogTrigger ref={confirmModalRef}></AlertDialogTrigger>
         <AlertDialogContent>

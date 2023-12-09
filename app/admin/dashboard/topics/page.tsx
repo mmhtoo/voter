@@ -11,7 +11,11 @@ export const metadata: Metadata = {
   title: 'Topics',
 }
 
-export default async function DashboardTopicsPage() {
+export default async function DashboardTopicsPage(props: {
+  searchParams: {
+    page?: number
+  }
+}) {
   return (
     <div className={'w-100 min-h-screen mt-[72px] p-5 '}>
       <div className="flex items-center justify-between">
@@ -32,7 +36,7 @@ export default async function DashboardTopicsPage() {
       </div>
       <Separator />
       <Suspense fallback={<TopicsTableSkeleton />}>
-        <TopicsTableWrapper />
+        <TopicsTableWrapper page={props.searchParams.page} />
       </Suspense>
     </div>
   )
